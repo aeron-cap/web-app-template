@@ -8,6 +8,7 @@ import {
 
 export const usersTable = pgTable('users', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  name: text('name').notNull().default('user'),
   username: text('username').notNull().unique(),
   password: text('password').notNull(),
   email: text('email').notNull().unique(),
