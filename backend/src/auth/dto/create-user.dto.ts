@@ -17,8 +17,4 @@ export class CreateUserDto implements NewUser {
 
   @IsEmail()
   email: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isAdmin: boolean = false;
 }

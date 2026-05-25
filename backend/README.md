@@ -49,8 +49,6 @@ A backend template using the NestJS framework, Drizzle ORM for type-safe databas
 ## Project Structure
 ```bash
     ├── docker-compose.yml
-    ├── drizzle
-    │   └── drizzle.provider.ts
     ├── drizzle.config.ts
     ├── eslint.config.mjs
     ├── nest-cli.json
@@ -70,6 +68,8 @@ A backend template using the NestJS framework, Drizzle ORM for type-safe databas
     │   ├── db
     │   │   ├── drizzle.module.ts
     │   │   └── schema.ts
+    │   ├── drizzle
+    │   │   └── drizzle.provider.ts
     └── └── main.ts
 ```
 
