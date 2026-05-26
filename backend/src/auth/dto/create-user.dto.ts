@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 import { usersTable } from 'src/db/schema';
 
 type InsertUser = typeof usersTable.$inferInsert;
