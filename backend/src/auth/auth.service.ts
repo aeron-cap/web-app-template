@@ -25,7 +25,14 @@ export class AuthService {
       const [user] = await tx.insert(sc.usersTable).values(dto).returning();
       return user;
     });
-    return user;
+
+    if (!user) {
+      throw new ForbiddenException('Cannot create user at this moment');
+    }
+
+    return {
+      message: 'User created successfully',
+    };
   }
 
   async login(dto: LoginDto) {
@@ -37,6 +44,10 @@ export class AuthService {
 
     const passwordMatch = await argon2.verify(user.password, dto.password);
     if (!passwordMatch) throw new ForbiddenException('Credentials incorrect');
+
+    return {
+      message: 'Login successful',
+    };
   }
 
   async signToken(
