@@ -3,97 +3,86 @@ _This is updated regularly._
 ---
 
 # Quick Starter template for a Dockerized NestJS backend with Drizzle ORM with PostgreSQL
-A backend template using the NestJS framework, Drizzle ORM for type-safe database interactions, and a PostgreSQL database, all containerized with Docker.
+A production-ready backend template using the NestJS framework, Drizzle ORM for type-safe database interactions, and a PostgreSQL database, all containerized with Docker.
 
 ## Tech Stack
 - [**NestJS**](https://docs.nestjs.com/) – Progressive Node.js framework
 - [**Drizzle ORM**](https://orm.drizzle.team/) – Type-safe SQL ORM
 - **PostgreSQL** – Relational database
 - **Docker** – Containerized environment
+- [**Passport & JWT**](https://docs.nestjs.com/security/authentication) – Secure authentication
+- [**Terminus**](https://docs.nestjs.com/recipes/terminus) – Health checks & monitoring
+- [**Throttler**](https://docs.nestjs.com/security/rate-limiting) – Rate limiting / Brute-force protection
+
+## Features Implemented
+- **Global Authentication Guard:** All routes are protected by default via `JwtAuthGuard`. Use the `@Public()` decorator to bypass it.
+- **Rate Limiting:** Global rate limiting configured to prevent API abuse.
+- **Health Checks:** Accessible at `/health` for monitoring system vitals (Database connection, external services).
+- **Type-safe Database:** Drizzle ORM provides full TypeScript support for all SQL operations.
+- **Global Exception Filter:** Specialized handling for database-specific errors.
 
 ## How to Start
 ```bash
     npm install
-    # run these if it's not installed for some reason :>
-    npm install drizzle-orm pg
-    npm install -D drizzle-kit
+    # Ensure Docker is running
+    docker-compose up -d
+    
+    # Run migrations
+    npm run generate
+    npm run migrate
 
+    # Start the app
     npm run start:dev
-    docker-compose up --build -d
 ```
 
 ## Docker Setup
+The template includes a pre-configured `docker-compose.yml` for local development.
+
 ```yaml
     version: '3.8'
     
     services:
        dev-db:
-          image: postgres:15-alpine
+          image: postgres:17-alpine
           container_name: dev-postgres
-          restart: unless-stopped
-          ports:
-             - "5438:5432"
-          environment:
-            POSTGRES_USER: user
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: devdb
-          volumes:
-            - pgdata-dev:/var/lib/postgresql/data
-
-        # Will add the api service soon
-    
-    volumes:
-      pgdata-dev:
+          # ... (Standard PG config)
 ```
 
 ## Project Structure
 ```bash
-    ├── docker-compose.yml
-    ├── drizzle.config.ts
-    ├── eslint.config.mjs
-    ├── nest-cli.json
-    ├── package.json
-    ├── README.md
     ├── src
-    │   ├── app.controller.spec.ts
-    │   ├── app.controller.ts
-    │   ├── app.module.ts
-    │   ├── app.service.ts
-    │   ├── <feature>
-    │   │   ├── feature.controller.ts
-    │   │   ├── feature.module.ts
-    │   │   ├── feature.service.ts
-    │   │   ├── dto
-    │   │   │   └── feature.dto.ts
+    │   ├── auth
+    │   │   ├── guards/jwt.guard.ts     # Global Auth Logic
+    │   │   └── decorator/public.decorator.ts
+    │   ├── common
+    │   │   └── filters/                # Global Error Handling
     │   ├── db
-    │   │   ├── drizzle.module.ts
-    │   │   └── schema.ts
-    │   ├── drizzle
-    │   │   └── drizzle.provider.ts
-    └── └── main.ts
+    │   │   ├── schema.ts               # Database Models
+    │   │   └── drizzle.module.ts
+    │   ├── health                      # Monitoring Module
+    │   └── main.ts                     # App entry & Global Middlewares
 ```
 
-## Model Pattern
-Features are added by following this pattern
-```bash
-    <feature>/
-    ├── feature.controller.ts   # Handles HTTP requests
-    ├── feature.service.ts      # Business logic
-    ├── feature.module.ts       # Module definition
+## Authentication & Authorization
+By default, every endpoint is **PRIVATE**.
+To make an endpoint public, use the custom decorator:
+
+```typescript
+@Public()
+@Get('some-open-route')
+findAll() { ... }
 ```
 
 ## Common commands
 ```bash
     npm run generate    # Creates Migration for database schema changes
     npm run migrate     # Performs the Migrations to the database
+    npm run studio      # Opens Drizzle Studio UI to manage data
 ```
 
-## Preferred Practice
-- Use modules per feature
-- Keep controllers clean and services rich
-- Use Validation Pipes in DTOs
-
 ## Future Additions
-1. Add Auth Strategies and Guards (JWT)
-2. Add Testing
-3. Add CI/CD
+- [ ] Structured Logging (nestjs-pino)
+- [ ] Email Service Integration
+- [ ] Multi-stage Production Dockerfile
+- [ ] CI/CD Pipelines (GitHub Actions)
+pens Drizzle Studio UI to manage data
