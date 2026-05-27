@@ -7,10 +7,19 @@ import { DrizzleModule } from './db/drizzle.module';
 import { UserModule } from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000, // miliseconds (1 min)
+          limit: 10,
+        },
+      ],
+    }),
     DrizzleModule,
     AuthModule,
     UserModule,
