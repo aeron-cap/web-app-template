@@ -4,11 +4,33 @@ import { ValidationPipe } from '@nestjs/common';
 import { GlobalDbExceptionFilter } from './common/filters/global-db-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.use(helmet());
+
+  app.use(
+    helmet({
+      hsts: process.env.NODE_ENV === 'production' ? true : false,
+      contentSecurityPolicy:
+        process.env.NODE_ENV === 'production'
+          ? {
+              directives: {
+                'script-src': [
+                  "'self'",
+                  "'unsafe-inline'",
+                  '://cloudflare.com',
+                ],
+                'img-src': ["'self'", 'data:', 'validator.swagger.io'],
+                'style-src': ["'self'", "'unsafe-inline'"],
+              },
+            }
+          : false,
+    }),
+  );
+
+  app.useLogger(app.get(Logger));
 
   app.useGlobalFilters(new GlobalDbExceptionFilter(httpAdapter));
   app.useGlobalPipes(
