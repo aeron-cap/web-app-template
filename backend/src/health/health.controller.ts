@@ -6,8 +6,8 @@ import {
   HttpHealthIndicator,
 } from '@nestjs/terminus';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Public } from 'src/auth/decorator/public.decorator';
-import { DRIZZLE } from 'src/drizzle/drizzle.provider';
+import { Public } from '../auth/decorator/public.decorator';
+import { DRIZZLE } from '../drizzle/drizzle.provider';
 import * as sc from '../db/schema';
 import { sql } from 'drizzle-orm';
 
