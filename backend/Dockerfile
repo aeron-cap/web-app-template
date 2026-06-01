@@ -33,12 +33,12 @@ COPY --from=builder /app/dist ./dist
 COPY --from=deps /app/node_modules ./node_modules
 # Copy package.json
 COPY package.json ./
-# User non-root 'node' user given by the image
-USER node
 # Expose port same as nestjs
 EXPOSE 3000
 # Start the app
 COPY docker-entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# User non-root 'node' user given by the image
+USER node
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "dist/main"]
