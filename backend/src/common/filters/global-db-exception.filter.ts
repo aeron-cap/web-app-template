@@ -20,7 +20,7 @@ function isDrizzleUniqueViolation(error: unknown): error is DrizzleError {
     'cause' in err &&
     typeof err.cause === 'object' &&
     err.cause !== null &&
-    err.cause.code === '23505'
+    (err.cause as { code: string }).code === '23505'
   );
 }
 

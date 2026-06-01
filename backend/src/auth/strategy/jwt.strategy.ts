@@ -6,7 +6,6 @@ import { DRIZZLE } from 'src/drizzle/drizzle.provider';
 import * as sc from '../../db/schema';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { eq } from 'drizzle-orm';
-import { getTableColumns } from 'drizzle-orm';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -21,10 +20,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: { sub: string; email: string }) {
-    const { password, ...rest } = getTableColumns(sc.usersTable);
     const [user] = await this.db
       .select({
-        ...rest,
+        id: sc.usersTable.id,
+        email: sc.usersTable.email,
       })
       .from(sc.usersTable)
       .where(eq(sc.usersTable.id, payload.sub));
