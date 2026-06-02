@@ -6,6 +6,7 @@ import { DRIZZLE } from 'src/drizzle/drizzle.provider';
 import * as sc from '../../db/schema';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { eq } from 'drizzle-orm';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -14,7 +15,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     @Inject(DRIZZLE) private db: NodePgDatabase<typeof sc>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          const cookies = request?.cookies as
+            | Record<string, string>
+            | undefined;
+          return cookies?.access_token || null;
+        },
+      ]),
       secretOrKey: config.getOrThrow<string>('JWT_SECRET'),
     });
   }

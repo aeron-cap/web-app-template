@@ -45,7 +45,10 @@ export class AuthService {
     const passwordMatch = await argon2.verify(user.password, dto.password);
     if (!passwordMatch) throw new ForbiddenException('Credentials incorrect');
 
+    const { access_token } = await this.signToken(user.id, user.email);
+
     return {
+      access_token,
       message: 'Login successful',
     };
   }

@@ -5,10 +5,12 @@ import { GlobalDbExceptionFilter } from './common/filters/global-db-exception.fi
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const { httpAdapter } = app.get(HttpAdapterHost);
+  app.use(cookieParser());
 
   app.use(
     helmet({
