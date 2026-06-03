@@ -11,9 +11,14 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
 import { LoggerModule } from 'nestjs-pino';
 
+import { configValidationSchema } from './common/config.validation';
+
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: configValidationSchema,
+    }),
     LoggerModule.forRoot({
       pinoHttp: {
         autoLogging: {

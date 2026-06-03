@@ -3,8 +3,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './decorator/public.decorator';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
+import { UserResponseDto } from '../user/dto/user-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -43,6 +44,7 @@ export class AuthController {
     return { message: 'Logged out successfully' };
   }
 
+  @ApiResponse({ type: UserResponseDto })
   @Get('me')
   getMe(@Req() req: Request) {
     return req.user;
