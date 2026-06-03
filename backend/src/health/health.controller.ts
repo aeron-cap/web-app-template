@@ -11,6 +11,9 @@ import { DRIZZLE } from '../drizzle/drizzle.provider';
 import * as sc from '../db/schema';
 import { sql } from 'drizzle-orm';
 
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('health')
 @Controller('health')
 export class HealthController {
   constructor(

@@ -1,23 +1,24 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './decorator/public.decorator';
-import { ApiBody } from '@nestjs/swagger';
-import type { Response } from 'express';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import type { Request, Response } from 'express';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @ApiBody({ type: [CreateUserDto] })
+  @ApiBody({ type: CreateUserDto })
   @Public()
   @Post('signup')
   signup(@Body() dto: CreateUserDto) {
     return this.authService.createUser(dto);
   }
 
-  @ApiBody({ type: [LoginDto] })
+  @ApiBody({ type: LoginDto })
   @Public()
   @Post('login')
   async login(
@@ -29,10 +30,21 @@ export class AuthController {
     res.cookie('access_token', response.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production' ? true : false,
-      sameSite: 'strict',
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     return { message: response.message };
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    return { message: 'Logged out successfully' };
+  }
+
+  @Get('me')
+  getMe(@Req() req: Request) {
+    return req.user;
   }
 }
