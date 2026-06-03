@@ -84,6 +84,6 @@ findAll() { ... }
 - [x] Structured Logging (nestjs-pino)
 - [x] Multi-stage Production Dockerfile
 - [x] CI/CD Pipelines (GitHub Actions)
-- [ ] Testing
+- [x] Testing
 - [ ] Email Service Integration
 pens Drizzle Studio UI to manage data
