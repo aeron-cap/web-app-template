@@ -20,7 +20,7 @@
 
 #### Stack:
 - Frontend
-  - React (Typescript)
+  - SolidJS (Typescript)
 - Backend
   - NestJS (Typescript)
 - Database
