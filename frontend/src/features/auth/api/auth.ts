@@ -8,7 +8,7 @@ export const authApi = {
   },
   
   signup: async (data: SignupInput): Promise<{ access_token: string }> => {
-    const response = await client.post('/auth/register', data);
+    const response = await client.post('/auth/signup', data);
     return response.data;
   },
 

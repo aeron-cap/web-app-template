@@ -19,6 +19,10 @@ export class AuthService {
   ) {}
 
   async createUser(dto: CreateUserDto) {
+    if (dto.password != dto.confirmPassword) {
+      throw new ForbiddenException('Passwords do not match');
+    }
+
     const hash = await argon2.hash(dto.password);
     dto.password = hash;
     const user = await this.db.transaction(async (tx) => {

@@ -22,15 +22,9 @@ export function LoginPage() {
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      // You can store tokens in localStorage here, 
-      // though HTTP-only cookies from the backend are safer if supported.
-      // localStorage.setItem('token', data.access_token);
-      
-      // Navigate to the home page or dashboard after successful login
       navigate({ to: '/' });
     },
     onError: (error: any) => {
-      // Handle API errors (e.g., 401 Unauthorized)
       const message = error.response?.data?.message || 'Failed to login. Please try again.';
       setError('root', { type: 'manual', message });
     },

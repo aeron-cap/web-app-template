@@ -8,6 +8,8 @@ export const loginSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const signupSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  username: z.string().min(1, 'Username is required'),
   email: z.email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
@@ -23,6 +25,7 @@ export const userResponseSchema = z.object({
   email: z.email(),
   name: z.string().optional(),
   createdAt: z.iso.datetime(),
+  isAdmin: z.boolean(),
 });
 
 export type UserResponse = z.infer<typeof userResponseSchema>;

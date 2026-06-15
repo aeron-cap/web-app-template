@@ -15,6 +15,9 @@ export class CreateUserDto implements NewUser {
   @IsString()
   password: string;
 
+  @IsString()
+  confirmPassword: string;
+
   @IsEmail()
   email: string;
 }
